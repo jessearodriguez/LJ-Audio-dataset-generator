@@ -1,0 +1,17 @@
+
+*.csv
+*.csv
+*.wav
+*.npy
+*.wav
+
+mags/
+mels/
+samples/
+tempaudio/
+transcripts/
+logdir/
+dataset/wavs/
+
+harvard_sentences.txt
+tets.py
