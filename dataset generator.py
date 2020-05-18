@@ -8,7 +8,7 @@ import subprocess
 
 import num2words
 
-def textnum2str(text):
+def textnum2str(text): # converts a sentence containing numbers to a sentence with those numbers converted to strings
 
     strarr = text.split()
     for i in range(len(strarr)):
@@ -22,7 +22,7 @@ def textnum2str(text):
 
     return formatted
 
-def is_number(s):
+def is_number(s): # determines if input is a number or not
     try:
         float(s)
         return True
@@ -33,7 +33,8 @@ url = "https://www.youtube.com/watch?v="
 ids = []
 
 text = ""
-while text != "done":
+
+while text != "done": # loop to get all video ids
     text = input("enter video id; type \"done\" to move on")
     if text != "done":
         ids.append(text)
@@ -45,12 +46,12 @@ for id in ids:
 
 
 
-f = open("dataset/" + "metadata" + ".csv", "w", encoding="utf-8")
+f = open("dataset/" + "metadata" + ".csv", "w", encoding="utf-8") #create the metadata cvs file for the dataset
 
 videonum = 1
 textid = 1
 for id in ids:
-    transcript = YouTubeTranscriptApi.get_transcript(id)
+    transcript = YouTubeTranscriptApi.get_transcript(id) #get the video transcript
 
 
     ydl_opts = {'noplaylist' : True,
@@ -63,12 +64,12 @@ for id in ids:
 
         #ydl.list_formats(info)
 
-        ydl.download([url + id])
+        ydl.download([url + id]) #downloads video audio as a webm
 
     filename = "tempaudio/" + id + ".webm"
     newfile = "tempaudio/" + id + ".wav"
 
-    subprocess.run(
+    subprocess.run( #converts the webm to wav using ffmpeg
         (['ffmpeg', '-y', '-i', filename, newfile]))
 
     os.remove(filename)
@@ -76,7 +77,7 @@ for id in ids:
     audio = pydub.AudioSegment.from_wav(newfile)
 
     lastitem = False
-    for i in range(len(transcript)):
+    for i in range(len(transcript)): #generates audio splices based off of transcript start times
 
         item = transcript[i]
 
@@ -94,12 +95,12 @@ for id in ids:
         id_tag = "video-" + str(videonum) + "-" + str(textid)
 
         if len(item['text']) > 20:
-            start = int(item['start']*1000) #converting to milliseconds
-
+            start = int(item['start']*1000+ 150) #converting to milliseconds
+            #the addition of 150 ms and 300 ms helps out the time youtube's transcripts to a more correct value
             if lastitem:
-                end = start + int(futureitem['duration'] * 1000)
+                end = start + int(futureitem['duration'] * 1000 )
             else:
-                end = int(futureitem['start'] * 1000 + 400)
+                end = int(futureitem['start'] * 1000 + 300)
 
 
             audioselection = audio[start:end]
@@ -108,7 +109,7 @@ for id in ids:
 
             formattedtext = textnum2str(item['text'])
 
-            linewrite = id_tag + "|" + formattedtext + "|" + formattedtext + "\n"
+            linewrite = id_tag + "|" + item['text'] + "|" + formattedtext + "\n"
 
             f.write(linewrite)
 
