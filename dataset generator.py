@@ -7,6 +7,8 @@ import os
 import subprocess
 
 import num2words
+import random
+
 
 def textnum2str(text): # converts a sentence containing numbers to a sentence with those numbers converted to strings
 
@@ -22,12 +24,117 @@ def textnum2str(text): # converts a sentence containing numbers to a sentence wi
 
     return formatted
 
+
 def is_number(s): # determines if input is a number or not
     try:
         float(s)
         return True
     except ValueError:
         return False
+
+
+def randomConcat(transcript):  # randomly concatenates the transcript and returns it in a similar format
+    newtranscript = []
+
+
+    newitem = {}
+    i = 0
+    while i < len(transcript):
+
+        concated = False
+
+        if len(transcript[i]['text']) > 15: #check if the sentence meets minimum length requirements, useful to filter out "[music]" type subtittles
+
+            if i == len(transcript) - 1: #is the last item in the list
+                newitem = transcript[i]
+                i += 1
+
+            else: # there's probably a cleaner way to do this
+
+                try: # to catch the last few index out of bounds errors from trying to access i+x approaching towards the end of the list
+
+                    if random.random() < 0.75: #1 random chance concatination
+
+                        if random.random() < 0.5:#2 random chance concationation
+
+                            if random.random() < 0.5:#3 random concatination
+                                j = 0
+                                newtext = ""
+                                start =transcript[i]['start']
+                                duration = transcript[i]['duration']
+                                while j < 3:
+
+                                    if len(transcript[i]['text']) > 15:
+                                        newtext += transcript[i]['text'] + " "
+                                        j += 1
+                                    i += 1
+
+
+
+                                newitem = {
+                                    "text": newtext,
+                                    "start": start,
+                                    "duration": duration,
+                                    }
+                                concated = True
+
+                            if not concated:
+                                j = 0
+                                newtext = ""
+                                start = transcript[i]['start']
+                                duration = transcript[i]['duration']
+                                while j < 2:
+
+                                    if len(transcript[i]['text']) > 15:
+                                        newtext += transcript[i]['text'] + " "
+                                        j += 1
+                                    i += 1
+
+                                newitem = {
+                                    "text": newtext,
+                                    "start": start,
+                                    "duration": duration,
+                                }
+                                concated = True
+                        if not concated:
+                            j = 0
+                            newtext = ""
+                            start = transcript[i]['start']
+                            duration = transcript[i]['duration']
+                            while j < 1:
+
+                                if len(transcript[i]['text']) > 15:
+                                    newtext += transcript[i]['text'] + " "
+                                    j += 1
+                                i += 1
+
+                            newitem = {
+                                "text": newtext,
+                                "start": start,
+                                "duration": duration,
+                            }
+                            concated = True
+
+                    else:
+                        newitem = transcript[i]
+                        i += 1
+
+                except IndexError:
+                    try:
+                        newitem = transcript[i]
+                        i += 1
+                    except:
+                        pass
+
+
+
+            newtranscript.append(newitem)
+        else:
+            i += 1
+
+
+    return newtranscript
+
 
 url = "https://www.youtube.com/watch?v="
 ids = []
@@ -51,8 +158,10 @@ f = open("dataset/" + "metadata" + ".csv", "w", encoding="utf-8") #create the me
 videonum = 1
 textid = 1
 for id in ids:
+
     transcript = YouTubeTranscriptApi.get_transcript(id) #get the video transcript
 
+    transcript = randomConcat(transcript)
 
     ydl_opts = {'noplaylist' : True,
                 'format' : 'bestaudio/best',
@@ -77,6 +186,7 @@ for id in ids:
     audio = pydub.AudioSegment.from_wav(newfile)
 
     lastitem = False
+
     for i in range(len(transcript)): #generates audio splices based off of transcript start times
 
         item = transcript[i]
