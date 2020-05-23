@@ -183,6 +183,14 @@ for id in ids:
 
     os.remove(filename)
 
+    cont = False
+
+    while not cont:
+        if input("type cont to continue") == "cont":
+
+            cont = True
+
+
     audio = pydub.AudioSegment.from_wav(newfile)
 
     lastitem = False

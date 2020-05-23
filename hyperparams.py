@@ -7,7 +7,7 @@ https://www.github.com/kyubyong/dc_tts
 class Hyperparams:
     '''Hyper parameters'''
     # pipeline
-    prepro = False  # if True, run `python prepro.py` first before running `python train.py`.
+    prepro = True  # if True, run `python prepro.py` first before running `python train.py`.
     
     # signal processing
     sr = 22050  # Sampling rate.
@@ -43,5 +43,5 @@ class Hyperparams:
     lr = 0.001 # Initial learning rate.
     logdir = "logdir/LJ01"
     sampledir = 'samples'
-    B = 32 # batch size
+    B = 16 # batch size
     num_iterations = 2000000
