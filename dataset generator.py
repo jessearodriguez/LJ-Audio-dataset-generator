@@ -183,17 +183,13 @@ for id in ids:
 
     os.remove(filename)
 
-    cont = False
 
-    while not cont:
-        if input("type cont to continue") == "cont":
-
-            cont = True
 
 
     audio = pydub.AudioSegment.from_wav(newfile)
 
-    audio = pydub.AudioSegment.set_frame_rate(22050) #sample rate used in the lj dataset
+    audio = audio.set_frame_rate(22050) #sample rate used in the lj dataset
+    audio = audio.set_channels(1) #stereo to mono conversion
 
     lastitem = False
 
