@@ -40,8 +40,8 @@ class Hyperparams:
     max_T = 210 # Maximum number of mel frames.
 
     # training scheme
-    lr = 0.001 # Initial learning rate.
+    lr = 0.0001 # Initial learning rate.
     logdir = "logdir/LJ01"
     sampledir = 'samples'
-    B = 16 # batch size
+    B = 32 # batch size
     num_iterations = 2000000
