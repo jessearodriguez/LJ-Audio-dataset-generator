@@ -193,6 +193,8 @@ for id in ids:
 
     audio = pydub.AudioSegment.from_wav(newfile)
 
+    audio = pydub.AudioSegment.set_frame_rate(22050) #sample rate used in the lj dataset
+
     lastitem = False
 
     for i in range(len(transcript)): #generates audio splices based off of transcript start times
