@@ -1,10 +1,12 @@
-from youtube_transcript_api import YouTubeTranscriptApi
+import os
+import pydub
 
 
-transcript = YouTubeTranscriptApi.get_transcript("oG2MIqhYYHg")
+for wav in os.listdir("dataset/wavs"):
+    print(wav)
+    audio = pydub.AudioSegment.from_wav("dataset/wavs/" + wav)
 
+    audio = audio.set_frame_rate(22050)  # sample rate used in the lj dataset
+    audio = audio.set_channels(1)  # stereo to mono conversion
 
-len(transcript)
-
-for i in range(len(transcript)):
-    print(transcript[i])
+    audio.export("dataset/temp/" + wav, format="wav")

@@ -195,6 +195,8 @@ for id in ids:
 
     for i in range(len(transcript)): #generates audio splices based off of transcript start times
 
+        if i > len(transcript)-3: #stops the inclusion of the last 3 lines (these tend to be broken from youtube transcripts)
+            continue
         item = transcript[i]
 
         futureitem = item
