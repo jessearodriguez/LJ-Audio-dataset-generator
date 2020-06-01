@@ -49,6 +49,7 @@ class Hyperparams:
 
     # select the trainable layers for transfer learning (i.e. remove the layers you want to fix during transfer learning)
     selected_tvars = [
+
                     'SSRN/C_1/',
                     'SSRN/HC_2/',
                     'SSRN/HC_3/',
@@ -61,10 +62,13 @@ class Hyperparams:
                     'SSRN/C_10/',
                     'SSRN/HC_11/',
                     'SSRN/HC_12/',
+
                     'SSRN/C_13/',
                     'SSRN/C_14/',
                     'SSRN/C_15/',
                     'SSRN/C_16/',
+
+
                     'Text2Mel/TextEnc/embed_1/',
                     'Text2Mel/TextEnc/C_2/',
                     'Text2Mel/TextEnc/C_3/',
@@ -75,11 +79,14 @@ class Hyperparams:
                     'Text2Mel/TextEnc/HC_8/',
                     'Text2Mel/TextEnc/HC_9/',
                     'Text2Mel/TextEnc/HC_10/',
+
                     'Text2Mel/TextEnc/HC_11/',
                     'Text2Mel/TextEnc/HC_12/',
                     'Text2Mel/TextEnc/HC_13/',
                     'Text2Mel/TextEnc/HC_14/',
                     'Text2Mel/TextEnc/HC_15/',
+
+
                     'Text2Mel/AudioEnc/C_1/',
                     'Text2Mel/AudioEnc/C_2/',
                     'Text2Mel/AudioEnc/C_3/',
@@ -88,17 +95,21 @@ class Hyperparams:
                     'Text2Mel/AudioEnc/HC_6/',
                     'Text2Mel/AudioEnc/HC_7/',
                     'Text2Mel/AudioEnc/HC_8/',
+
                     'Text2Mel/AudioEnc/HC_9/',
                     'Text2Mel/AudioEnc/HC_10/',
                     'Text2Mel/AudioEnc/HC_11/',
                     'Text2Mel/AudioEnc/HC_12/',
                     'Text2Mel/AudioEnc/HC_13/',
+
+
                     'Text2Mel/AudioDec/C_1/',
                     'Text2Mel/AudioDec/HC_2/',
                     'Text2Mel/AudioDec/HC_3/',
                     'Text2Mel/AudioDec/HC_4/',
                     'Text2Mel/AudioDec/HC_5/',
                     'Text2Mel/AudioDec/HC_6/',
+
                     'Text2Mel/AudioDec/HC_7/',
                     'Text2Mel/AudioDec/C_8/',
                     'Text2Mel/AudioDec/C_9/',

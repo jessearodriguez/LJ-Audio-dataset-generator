@@ -53,21 +53,26 @@ def randomConcat(transcript):  # randomly concatenates the transcript and return
 
                 try: # to catch the last few index out of bounds errors from trying to access i+x approaching towards the end of the list
 
-                    if random.random() < 0.75: #1 random chance concatination
+                    if random.random() < .8: #1 random chance concatination
 
-                        if random.random() < 0.5:#2 random chance concationation
+                        if random.random() < 0.75:#2 random chance concationation
 
-                            if random.random() < 0.5:#3 random concatination
+                            if random.random() < 0.7:#3 random concatination
+
                                 j = 0
                                 newtext = ""
                                 start =transcript[i]['start']
                                 duration = transcript[i]['duration']
                                 while j < 3:
+                                    if transcript[i]['text'] != '[Music]':
+                                        if len(transcript[i]['text']) > 15:
 
-                                    if len(transcript[i]['text']) > 15:
-                                        newtext += transcript[i]['text'] + " "
-                                        j += 1
-                                    i += 1
+                                            newtext += transcript[i]['text'] + " "
+                                            j += 1
+                                        i += 1
+                                    else:
+                                        i += 1
+                                        continue
 
 
 
@@ -85,10 +90,15 @@ def randomConcat(transcript):  # randomly concatenates the transcript and return
                                 duration = transcript[i]['duration']
                                 while j < 2:
 
-                                    if len(transcript[i]['text']) > 15:
-                                        newtext += transcript[i]['text'] + " "
-                                        j += 1
-                                    i += 1
+                                    if transcript[i]['text'] != "[Music]":
+                                        if len(transcript[i]['text']) > 15:
+
+                                            newtext += transcript[i]['text'] + " "
+                                            j += 1
+                                        i += 1
+                                    else:
+                                        i += 1
+                                        continue
 
                                 newitem = {
                                     "text": newtext,
@@ -102,11 +112,14 @@ def randomConcat(transcript):  # randomly concatenates the transcript and return
                             start = transcript[i]['start']
                             duration = transcript[i]['duration']
                             while j < 1:
-
-                                if len(transcript[i]['text']) > 15:
-                                    newtext += transcript[i]['text'] + " "
-                                    j += 1
-                                i += 1
+                                if transcript[i]['text'] != "[Music]":
+                                    if len(transcript[i]['text']) > 15:
+                                        newtext += transcript[i]['text'] + " "
+                                        j += 1
+                                    i += 1
+                                else:
+                                    i += 1
+                                    continue
 
                             newitem = {
                                 "text": newtext,
@@ -175,7 +188,9 @@ for id in ids:
 
         ydl.download([url + id]) #downloads video audio as a webm
 
-    filename = "tempaudio/" + id + ".webm"
+    filename = "tempaudio/" + os.listdir("tempaudio/")[0]
+
+    #filename = "tempaudio/" + id + ".*"
     newfile = "tempaudio/" + id + ".wav"
 
     subprocess.run( #converts the webm to wav using ffmpeg
@@ -189,7 +204,9 @@ for id in ids:
     audio = pydub.AudioSegment.from_wav(newfile)
 
     audio = audio.set_frame_rate(22050) #sample rate used in the lj dataset
-    audio = audio.set_channels(1) #stereo to mono conversion
+
+    #audio = audio.set_channels(1) #stereo to mono conversion
+    #uncomment the above line if you are not planning on doing further audio proccessing
 
     lastitem = False
 
@@ -197,6 +214,9 @@ for id in ids:
 
         if i > len(transcript)-3: #stops the inclusion of the last 3 lines (these tend to be broken from youtube transcripts)
             continue
+        elif '[Music]' in transcript[i]['text']: #prevents long clips of speech containing long music pauses
+            continue
+
         item = transcript[i]
 
         futureitem = item
@@ -223,11 +243,16 @@ for id in ids:
 
             audioselection = audio[start:end]
 
+
+            if audioselection.duration_seconds > 30: #stops audio files larger than 30 seconds from appearing. these are mostly created when there is a long pause between the current and next transcription item.
+                continue
+
             audioselection.export("dataset/wavs/"+ id_tag+".wav", format="wav")
 
             formattedtext = textnum2str(item['text'])
 
             linewrite = id_tag + "|" + item['text'] + "|" + formattedtext + "\n"
+
 
             f.write(linewrite)
 
