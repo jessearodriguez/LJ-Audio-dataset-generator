@@ -120,16 +120,11 @@ class Graph:
             # Training Scheme
             self.lr = learning_rate_decay(hp.lr, self.global_step)
 
-            tvars = tf.trainable_variables()
-            tvars_new = []
-            for tvar in hp.selected_tvars:
-                tvars_new = tvars_new + [var for var in tvars if tvar in var.name]
-
             self.optimizer = tf.train.AdamOptimizer(learning_rate=self.lr)
             tf.summary.scalar("lr", self.lr)
 
             ## gradient clipping
-            self.gvs = self.optimizer.compute_gradients(self.loss, var_list=tvars_new)
+            self.gvs = self.optimizer.compute_gradients(self.loss)
             self.clipped = []
             for grad, var in self.gvs:
                 grad = tf.clip_by_value(grad, -1., 1.)
@@ -148,8 +143,8 @@ if __name__ == '__main__':
 
     logdir = hp.logdir + "-" + str(num)
     sv = tf.train.Supervisor(logdir=logdir, save_model_secs=0, global_step=g.global_step)
-    with sv.managed_session(config=tf.ConfigProto(allow_soft_placement=True)) as sess:
-        sv.saver.restore(sess, tf.train.latest_checkpoint(hp.logdir + "-" + str(num)))
+    with sv.managed_session() as sess:
+
         while 1:
             for _ in tqdm(range(g.num_batch), total=g.num_batch, ncols=70, leave=False, unit='b'):
                 gs, _ = sess.run([g.global_step, g.train_op])
