@@ -89,7 +89,7 @@ def spectrogram2wav(mag):
     wav = signal.lfilter([1], [1, -hp.preemphasis], wav)
 
     # trim
-    wav, _ = librosa.effects.trim(wav, top_db=20)
+    wav, _ = librosa.effects.trim(wav)
 
     return wav.astype(np.float32)
 

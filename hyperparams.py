@@ -8,7 +8,7 @@ class Hyperparams:
     '''Hyper parameters'''
     # pipeline
     prepro = True  # if True, run `python prepro.py` first before running `python train.py`.
-
+    
     # signal processing
     sr = 22050  # Sampling rate.
     n_fft = 2048  # fft points (samples)
@@ -19,7 +19,7 @@ class Hyperparams:
     n_mels = 80  # Number of Mel banks to generate
     power = 1.5  # Exponent for amplifying the predicted magnitude
     n_iter = 50  # Number of inversion iterations
-    preemphasis = 0.97
+    preemphasis = .97
     max_db = 100
     ref_db = 20
 
@@ -42,7 +42,6 @@ class Hyperparams:
     # training scheme
     lr = 0.001 # Initial learning rate.
     logdir = "logdir/LJ01"
-
     sampledir = 'samples'
     B = 32 # batch size
     num_iterations = 2000000

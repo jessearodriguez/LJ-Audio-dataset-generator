@@ -45,7 +45,6 @@ def load_data(mode="train"):
             transcript = os.path.join(hp.data, 'metadata.csv')
             lines = codecs.open(transcript, 'r', 'utf-8').readlines()
             for line in lines:
-
                 fname, _, text = line.strip().split("|")
 
                 fpath = os.path.join(hp.data, "wavs", fname + ".wav")
@@ -62,9 +61,7 @@ def load_data(mode="train"):
             fpaths, text_lengths, texts = [], [], []
             transcript = os.path.join(hp.data, 'metadata.csv')
             lines = codecs.open(transcript, 'r', 'utf-8').readlines()
-
             for line in lines:
-
                 fname, _, text, is_inside_quotes, duration = line.strip().split("|")
                 duration = float(duration)
                 if duration > 10. : continue
@@ -76,7 +73,6 @@ def load_data(mode="train"):
                 text = [char2idx[char] for char in text]
                 text_lengths.append(len(text))
                 texts.append(np.array(text, np.int32).tostring())
-
 
         return fpaths, text_lengths, texts
 
